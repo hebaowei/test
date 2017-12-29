@@ -53,7 +53,7 @@ def one_question():
     if timu_str in list_timu:
         return one_question()
     list_timu.append(timu_str)
-    print('题目: %s' % timu_str)
+    print('题目: %s=' % timu_str)
     print('分值: %d分' % oper_count)
     res = getResult(timu)
     context['data'] = '超时'
