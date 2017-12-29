@@ -52,7 +52,7 @@ def one_question():
     timu.append(Fraction(random.randint(1, 9), 1))
     for i in range(oper_count):
         timu.append(opers[random.randint(0, 3)])
-        ch=random.randint(1,7)
+        ch=random.randint(1,5)
         if ch==1:
             a=random.randint(1,9)
             b=random.randint(1,9)
