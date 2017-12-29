@@ -76,6 +76,7 @@ def main():
     n = int(input())
     tot_score = 0
     for i in range(n):
+        print('\n\n===========================================')
         print('总得分:%d' % tot_score)
         print('第%d题: ' % (i+1))
         score = one_question()
