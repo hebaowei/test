@@ -1,0 +1,85 @@
+import random
+import threading
+from fractions import Fraction
+
+list_timu = [] #题目数组
+
+# 把题目生成字符串
+def toString(timu):
+    res = ''
+    for item in timu:
+        res += str(item)
+    return res
+
+#计算timu的结果
+def getResult(timu):
+    res = []
+    res.append(timu[0])
+    for i in range(1, len(timu), 2):
+        if timu[i] == '+' or timu[i] == '-':
+            res.append(timu[i])
+            res.append(timu[i+1])
+        elif timu[i] == '*':
+            res[len(res)-1] = res[len(res)-1] * timu[i+1]
+        elif timu[i] == '/':
+            res[len(res)-1] = res[len(res)-1] / timu[i+1]
+    sum = res[0]
+    for i in range(1, len(res), 2):
+        if res[i] == '+':
+            sum = sum + res[i+1]
+        elif res[i] == '-':
+            sum = sum - res[i+1]
+        elif res[i] == '*':
+            sum = sum * res[i+1]
+        elif res[i] == '/':
+            sum = sum / res[i+1]
+    return sum
+
+context = { 'data' : 'default' }
+def input_func(context):
+    context['data'] = input( '请输入你的答案:' )
+
+
+  #得到一道题目 返回这道题的得分，有时间限制
+def one_question():
+    opers = ['+', '-', '*', '/']
+    timu = []
+    oper_count = random.randint(1, 10)
+    timu.append(Fraction(random.randint(1, 99), 1))
+    for i in range(oper_count):
+        timu.append(opers[random.randint(0, 3)])
+        timu.append(Fraction(random.randint(1, 99), 1))
+    timu_str = toString(timu)
+    if timu_str in list_timu:
+        return one_question()
+    list_timu.append(timu_str)
+    print('题目: %s' % timu_str)
+    print('分值: %d分' % oper_count)
+    res = getResult(timu)
+    context['data'] = '超时'
+    t = threading.Thread(target=input_func, args=(context, ))
+    t.start()
+    t.join(60)  # 等待60秒
+    if str(res) == context['data']:
+        print('回答正确，加%d分' % oper_count)
+        return oper_count
+    else:
+        if context['data'] == '超时':
+            print('超时')
+            return 0
+        else:
+            print("回答错误，正确答案是: %s" % str(res))
+            return 0
+#主界面函数
+def main():
+    print('输入题目个数n=：', end='')
+    n = int(input())
+    tot_score = 0
+    for i in range(n):
+        print('总得分:%d' % tot_score)
+        print('第%d题: ' % (i+1))
+        score = one_question()
+        tot_score += score
+    print('最终得分:%d' % tot_score)
+main()
+
