@@ -1,7 +1,7 @@
 import random
 import threading
 from fractions import Fraction
-
+import time
 list_timu = []
 
 def toString(timu):
@@ -40,6 +40,7 @@ context = { 'data' : 'default' }
 def input_func(context):
     context['data'] = input( '请输入你的答案:' )
 
+
 def one_question():
     '''
     一道题目
@@ -69,6 +70,7 @@ def one_question():
         return one_question()
     list_timu.append(timu_str)
     print('题目: %s' % timu_str)
+    time_start = time.time()
     print('分值: %d分' % oper_count)
     res= getResult(timu)
 
@@ -76,6 +78,8 @@ def one_question():
     t = threading.Thread(target=input_func, args=(context, ))
     t.start()
     t.join(60)  # 等待60秒
+    time_end = time.time()
+    print('耗时：',int(time_end - time_start), 's')
     if str(res) == context['data']:
         print('回答正确，加%d分' % oper_count)
         return oper_count
@@ -86,6 +90,8 @@ def one_question():
         else:
             print("回答错误，正确答案是: %s" % str(res))
             return 0
+
+
 
 def main():
     print('输入题目个数n=：', end='')
