@@ -3,6 +3,8 @@ import threading
 from fractions import Fraction
 import time
 list_timu = []
+wrong_timu=[]
+
 
 def toString(timu):
     ''' 把题目生成字符串 '''
@@ -81,7 +83,7 @@ def one_question():
     time_end = time.time()
     print('耗时：',int(time_end - time_start), 's')
     if str(res) == context['data']:
-        print('回答正确，加%d分' % oper_count)
+        print('回答正确，加%d分' %oper_count)
         return oper_count
     else:
         if context['data'] == '超时':
@@ -89,6 +91,7 @@ def one_question():
             return 0
         else:
             print("回答错误，正确答案是: %s" % str(res))
+            wrong_timu.append( timu_str)
             return 0
 
 
@@ -104,6 +107,9 @@ def main():
         score = one_question()
         tot_score += score
     print('最终得分:%d' % tot_score)
+
+    print('错误题目：',wrong_timu)
+
 
 
 main()
