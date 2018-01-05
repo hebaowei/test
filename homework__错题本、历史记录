@@ -72,6 +72,10 @@ def one_question():
         return one_question()
     list_timu.append(timu_str)
     print('题目: %s' % timu_str)
+    ff=open('lishi.txt', 'a')
+    ff.writelines(timu_str)
+    ff.writelines('\n')
+    #ff.close()
     time_start = time.time()
     print('分值: %d分' % oper_count)
     res= getResult(timu)
@@ -92,6 +96,12 @@ def one_question():
         else:
             print("回答错误，正确答案是: %s" % str(res))
             wrong_timu.append( timu_str)
+            f = open('wrong.txt', 'a')
+            f.writelines(timu_str)
+            f.writelines('\n')
+            # f.writelines([line + '\n' for line in wrong_timu  ])
+            f.close()
+
             return 0
 
 
