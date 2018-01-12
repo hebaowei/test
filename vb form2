@@ -1,0 +1,132 @@
+Dim a() As Integer
+Dim b() As Integer
+Dim c() As Integer
+Dim result() As Single
+Dim cou As Single
+Dim n As String
+Dim X As String
+Dim i As Integer
+Dim p As Integer     '剩余时间
+Dim sum As Integer
+Dim right As Integer
+Dim wrong As Integer
+Dim w As Double
+Dim ww As String
+Dim S As Integer
+Dim d As Integer
+
+'小数化为分数函数
+Private Function Friction(Fri As Single) As String
+Const MAX = 0.01
+Dim i As Integer
+Dim str As String
+i = 1
+While Abs((i / Fri) - Round((i / Fri), 0)) > MAX
+  i = i + 1
+Wend
+str = i & "/" & Round(i / Fri)
+Friction = str
+End Function
+Private Sub product()
+ReDim Preserve a(cou)
+ReDim Preserve b(cou)
+ReDim Preserve c(cou)
+ReDim Preserve result(cou)
+a(cou) = 10 + Int(Rnd * 90)
+b(cou) = 1 + Int(Rnd * 4)
+c(cou) = 10 + Int(Rnd * 90)
+Select Case b(cou)
+ Case 1
+ Text2.Text = (CStr(a(cou)) & "+" & CStr(c(cou)) & "=")
+ result(cou) = a(cou) + c(cou)
+ Case 2
+ Text2.Text = (CStr(a(cou)) & "-" & CStr(c(cou)) & "=")
+ result(cou) = a(cou) - c(cou)
+ Case 3
+ Text2.Text = (CStr(a(cou)) & "*" & CStr(c(cou)) & "=")
+ result(cou) = a(cou) * c(cou)
+ Case 4
+  If Val(CStr(a(cou))) < Val(CStr(c(cou))) Then
+  Text2.Text = (CStr(a(cou)) & "÷" & CStr(c(cou)) & "=")
+   result(cou) = Int(a(cou) / c(cou))
+  Else
+   Text2.Text = (CStr(c(cou)) & "÷" & CStr(a(cou)) & "=")
+   result(cou) = Int(c(cou) / a(cou))
+  End If
+ End Select
+End Sub
+Private Sub Form_Load()
+Randomize
+Call product                 '调用生成题目的函数
+S = Val(Form1.Text2.Text)    '时间
+Timer1.Interval = 1000
+Label9.FontSize = 25
+Label9.Caption = "剩余时间" & Space(2) & S & Space(1) & "S"
+Label10.Caption = "总题数：" & Space(2) & Val(Form1.Text1.Text)
+sum = 0
+right = 0
+wrong = 0
+w = 0
+End Sub
+
+
+
+Private Sub Timer1_Timer()
+If p >= 0 Then
+i = i + 1
+p = S - i
+Label9.Caption = "剩余时间：" & Space(2) & p & Space(1) & "S"
+End If
+If p = 0 Then
+ wrong = wrong + 1
+ Label7.Caption = "错误题数：" & Space(2) & wrong
+ n = "×"
+ X = result(cou)
+ List1.AddItem (Text2.Text & Text1.Text & Chr(32) & CStr(n) & Space(3) & "答案是" & CStr(X))
+ i = -1
+ Call product
+End If
+If sum >= Val(Form1.Text1.Text) Then
+MsgBox "共答" & Val(Form1.Text1.Text) & "题，" & "正确" & right & "题，" & "错误" & wrong & "题，" & "正确率为" & ww, , "成绩"
+Unload Form2
+Form1.Show
+Load Form1
+MsgBox "请 退出系统", 48, "提示"
+End If
+End Sub
+Private Sub Text1_KeyPress(KeyAscii As Integer)
+If KeyAscii = 13 Then
+i = -1
+  If Val(Text1.Text) <> result(cou) Then n = "×" Else n = "√"
+   If n = "×" Then
+   wrong = wrong + 1
+   Label7.Caption = "错误题数：" & Space(2) & wrong
+   X = result(cou)
+   List1.AddItem (Text2.Text & Text1.Text & Chr(32) & CStr(n) & Space(3) & "答案是" & CStr(X))
+   Else
+   right = right + 1
+   Label6.Caption = "正确题数：" & Space(2) & right
+   List1.AddItem (Text2.Text & Text1.Text & Chr(32) & CStr(n))
+  End If
+  Text1.Text = ""
+ 
+Call product
+End If
+sum = right + wrong
+Label5.Caption = "已答题数：" & Space(2) & sum
+If sum > 0 Then
+w = right / sum
+If w = 0 Then
+ww = w
+Label8.Caption = "正确率：" & Space(2) & ww
+Else
+ww = Format(w, "#.###") * 100 & "%"
+Label8.Caption = "正确率：" & Space(2) & ww
+End If
+End If
+End Sub
+Private Sub Command3_Click()
+End
+End Sub
+
+
