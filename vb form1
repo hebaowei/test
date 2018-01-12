@@ -1,0 +1,27 @@
+Public tishu As Integer, shijian As Integer
+Private Sub Form_Load()
+Text1.Visible = False
+Text2.Visible = False
+Form1.Show
+MsgBox "请选择 题量 和 答题时间 ！", 48, "提示"
+Form2.Hide
+Unload Form2
+End Sub
+Private Sub Option1_Click(Index As Integer)
+tishu = Val(Option1(Index).Caption)
+Text1.Text = tishu
+Text1.Visible = True
+End Sub
+Private Sub Option2_Click(Index As Integer)
+shijian = Val(Option2(Index).Caption)
+Text2.Text = shijian
+Text2.Visible = True
+End Sub
+Private Sub Command1_Click()
+MsgBox "请直接在文本框中输入数字作答（其中除法为整除)，" & vbLf & "回车完成一题，系统自动生成下一题", , "提示"
+Form2.Show
+Form1.Hide
+End Sub
+Private Sub Command2_Click()
+End
+End Sub
