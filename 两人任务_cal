@@ -1,0 +1,13 @@
+import calcexpr
+import optparse
+import sys
+
+parser = optparse.OptionParser()
+parser.add_option("-n", type="int", dest="num")
+
+(options, args) = parser.parse_args(sys.argv)
+num = options.num if options.num else 5
+
+for q in calcexpr.gens(num):
+    ret = str(calcexpr.calc(q))
+    print("%s=%s" % (q, ret))
