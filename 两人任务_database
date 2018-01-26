@@ -1,0 +1,65 @@
+import sqlite3
+
+CONN = sqlite3.connect("store.sqlite3")
+
+try:
+    cu = CONN.cursor()
+    cu.execute('''CREATE TABLE "history" (
+         `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+         `question` TEXT,
+         `answer` TEXT,
+         `correct_answer` TEXT,
+         `created_at` TIMESTAMP DEFAULT '',
+         `solved_time` INTEGER,
+         `source` TEXT DEFAULT ''
+    )''')
+except:
+    pass
+
+def update(table, data, id):
+    cu = CONN.cursor()
+    keys = data.keys()
+    values = list(map(str, data.values()))
+
+    result = cu.execute(
+        "UPDATE " + table +
+        " SET " + ' , '.join((it + ' = ?') for it in keys) +
+        " WHERE id = " + str(id),
+        values
+    )
+
+    CONN.commit()
+    return id
+
+
+def insert(table, data={}):
+    cu = CONN.cursor()
+    keys = data.keys()
+    values = list(map(str, data.values()))
+    keylen = len(keys)
+    s = ','.join('?' for i in range(keylen))
+
+    result = cu.execute(
+        "INSERT INTO " + table +
+        " (" + ','.join(keys) + ") VALUES (" + s + ")",
+        values
+    )
+
+    id = cu.lastrowid
+    CONN.commit()
+    return id
+
+
+def fetch(table, where, rows, other_info=''):
+    cu = CONN.cursor()
+    result = cu.execute('SELECT ' + ','.join(rows) +
+                        ' FROM ' + table +
+                        ' WHERE ' + where +
+                        ' ' + other_info)
+    result = list(
+        dict(zip(rows, row)) for row in result
+    )
+    return result
+
+if __name__ == '__main__':
+    print(fetch('history', '1', ['id', 'question', 'answer']))
