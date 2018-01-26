@@ -1,0 +1,115 @@
+import random
+from fractions import Fraction
+ops_rule = {
+    '+': 1,
+    '-': 1,
+    '*': 2,
+    '÷': 2
+}
+
+def toString(timu):
+    ''' 把题目生成字符串 '''
+    res = ''
+    for item in timu:
+        res += str(item)
+        res +=chr(32)
+
+
+    return res
+def middle_to_after(s):
+    expression = []
+    ops = []
+    ss = s.split(' ')
+    for item in ss:
+        if item in ['+', '-', '*', '÷']:
+            while len(ops) >= 0:
+                if len(ops) == 0:
+                    ops.append(item)
+                    break
+                op = ops.pop()
+                if op == '(' or ops_rule[item] > ops_rule[op]:
+                    ops.append(op)
+                    ops.append(item)
+                    break
+                else:
+                    expression.append(op)
+        elif item == '(':
+            ops.append(item)
+        elif item == ')':
+            while len(ops) > 0:
+                op = ops.pop()
+                if op == '(':
+                    break
+                else:
+                    expression.append(op)
+        else:
+            expression.append(item)
+
+    while len(ops) > 0:
+        expression.append(ops.pop())
+
+    return expression
+
+
+def expression_to_value(expression,s): #s是列表
+ stack_value = []
+ for item in expression:
+  if item in ['+', '-', '*', '÷']:
+   n2 = stack_value.pop()
+   n1 = stack_value.pop()
+   result = cal(n1, n2, item)
+   stack_value.append(result)
+
+   for i in range(0,len(s)):
+       if s[i]==n1 and s[i+1]==item and s[i+2]==n2:
+           s[i]=result
+           del s[i+1]
+           del s[i+1]
+           ss=toString(s)    #ss是字符串
+           print (ss)
+           #print(s,'11')
+           break
+   for i in range(0,len(s)):
+       if s[i]=='(' and s[i+2]==')':
+           del s[i]
+           del s[i+1]
+           ss=toString(s)
+           print (ss)
+           break
+
+  else:
+   stack_value.append((item))
+
+ return stack_value[0]
+
+
+def cal(n1, n2, op):
+    n1=Fraction(n1)
+    n2=Fraction (n2)
+    if op == '+':
+        ans = n1 + n2
+    elif op == '-':
+        ans = n1 - n2
+    elif op == '*':
+        ans = n1 * n2
+    else:
+        if n2 == '0':
+            print('分母不能为零！')
+        else:
+            ans = n1 / n2
+    return ans
+
+
+k1='3 ÷ 4 ÷ 1/2 - ( 1 ÷ 7 * 8 ) * 2 ÷ 7 ÷ 1 - 6'
+
+print(k1)
+expression = middle_to_after(k1) #后缀表达式
+expression1=k1.split(' ')  #列表
+expression2=toString(expression1 ) #字符串
+#print(expression )
+#print(expression1 )
+#print(expression2 )
+value = expression_to_value(expression,expression1)
+#print(value)
+
+
