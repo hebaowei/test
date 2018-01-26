@@ -1,0 +1,37 @@
+# -*- encoding: utf-8 -*-
+
+import calcexpr
+import database
+import http_server
+
+
+def new_question(count=5, **kw):
+    qs = calcexpr.gens(count)
+    return [{"question": q, "correct_answer": str(calcexpr.calc(q))} for q in qs]
+
+
+def update_history(id, **data):
+    database.update("history", data, id)
+    return "Updated"
+
+
+def write_history(**data):
+    return {"id": database.insert("history", data)}
+
+
+def get_history(**kw):
+    cond = []
+    if 'wrong' in kw:
+        cond.append("correct_answer!=answer")
+    cols = []
+
+    cond_str = '1' if not cond else ' AND '.join(cond)
+    columns = ('id', 'question', 'answer', 'correct_answer',
+               'created_at', 'solved_time', 'source')
+    return database.fetch('history', cond_str, columns, 'ORDER BY id DESC')
+
+http_server.register_method('/new', new_question)
+http_server.register_method('/history/update', update_history)
+http_server.register_method('/history/write', write_history)
+http_server.register_method('/history', get_history)
+http_server.start()
