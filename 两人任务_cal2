@@ -1,0 +1,44 @@
+# -*- encoding: utf-8 -*-
+
+from __future__ import print_function
+from fractions import Fraction
+import re
+import random
+
+
+def sanity(expr):
+    '解析数值'
+    try:
+        expr = re.sub(r'\s', '', expr)
+        return Fraction(expr)
+    except:
+        return None
+
+
+def calc(expr):
+    '计算表达式'
+    expr = re.sub(r'\s', '', expr)
+    expr = re.sub(r'(\d+)/', r'Fraction(\1)/', expr)
+    return eval(expr)
+
+
+def gen(ns=0, max_num=10):
+    '生成表达式'
+    if ns <= 1:
+        ns = random.randint(3, 5)
+    s = ""
+    chs = '+*-/*+*-/+-'
+    for i in range(ns):
+        s = s + chs[random.randint(0, len(chs) - 1)] + \
+            str(random.randint(1, max_num))
+    return s[1:]
+
+
+def gens(count=5, ns=0, max_num=10):
+    '生成多个表达式'
+    return (gen(ns, max_num) for i in range(count))
+
+if __name__ == '__main__':
+    print(sanity(' - 3 / 5'))
+    for expr in gens(5):
+        print(expr, '\t = ', calc(expr))
