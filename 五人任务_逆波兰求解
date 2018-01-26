@@ -66,7 +66,9 @@ def expression_to_value(expression,s): #s是列表
            del s[i+1]
            del s[i+1]
            ss=toString(s)    #ss是字符串
-           print (ss)
+           #print (ss)
+           if input('please input enter:')=='':
+               print(ss,'')
            #print(s,'11')
            break
    for i in range(0,len(s)):
@@ -100,7 +102,7 @@ def cal(n1, n2, op):
     return ans
 
 
-k1='3 ÷ 4 ÷ 1/2 - ( 1 ÷ 7 * 8 ) * 2 ÷ 7 ÷ 1 - 6'
+k1='( 3 ÷ 5 - 1/9 ) + 1 + 6 - 3/4 ÷ 4/9 * 2'
 
 print(k1)
 expression = middle_to_after(k1) #后缀表达式
