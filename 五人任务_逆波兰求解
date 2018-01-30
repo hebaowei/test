@@ -16,10 +16,10 @@ def toString(timu):
 
 
     return res
-def middle_to_after(s):
+def middle_to_after(ss):
     expression = []
     ops = []
-    ss = s.split(' ')
+   # ss = s.split(' ')
     for item in ss:
         if item in ['+', '-', '*', '÷']:
             while len(ops) >= 0:
@@ -87,7 +87,7 @@ def expression_to_value(expression,s): #s是列表
 
 def cal(n1, n2, op):
     n1=Fraction(n1)
-    n2=Fraction (n2)
+    n2=Fraction(n2)
     if op == '+':
         ans = n1 + n2
     elif op == '-':
@@ -102,16 +102,17 @@ def cal(n1, n2, op):
     return ans
 
 
-k1='( 3 ÷ 5 - 1/9 ) + 1 + 6 - 3/4 ÷ 4/9 * 2'
+k1='1 * 8 * ( 4 * 2 ÷ 1/3 ) ÷ 1 + 3 * 6'
 
 print(k1)
+k1=k1.split(' ')
 expression = middle_to_after(k1) #后缀表达式
-expression1=k1.split(' ')  #列表
-expression2=toString(expression1 ) #字符串
+#expression1=k1.split(' ')  #列表
+#expression2=toString(expression1 ) #字符串
 #print(expression )
 #print(expression1 )
 #print(expression2 )
-value = expression_to_value(expression,expression1)
+value = expression_to_value(expression,k1)
 #print(value)
 
 
